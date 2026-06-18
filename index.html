@@ -210,6 +210,106 @@
 
     .chip svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; opacity: 0.9; }
 
+    /* ---------- unified utility bar: search + contact ---------- */
+    .topbar-search {
+      position: relative;
+      flex: 1 1 220px;
+      max-width: 320px;
+    }
+
+    .topbar-search .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      color: var(--muted);
+      pointer-events: none;
+      display: grid;
+      place-items: center;
+    }
+
+    .topbar-search .search-icon svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+    .topbar-search input {
+      width: 100%;
+      border: 1.5px solid rgba(79, 182, 255, 0.45);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px 10px 38px;
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.2s ease;
+    }
+
+    .topbar-search input::placeholder { color: var(--muted); }
+
+    .topbar-search input:hover { background: var(--card-hover); }
+
+    .topbar-search input:focus {
+      border-color: var(--accent-2);
+      box-shadow: 0 0 0 4px rgba(255, 206, 58, 0.16), 0 0 18px rgba(255, 206, 58, 0.32);
+    }
+
+    .contact-wrap { position: relative; }
+
+    .contact-card {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 280px;
+      max-width: calc(100vw - 48px);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      backdrop-filter: blur(20px);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px) scale(0.96);
+      transform-origin: top right;
+      transition: opacity 0.22s ease, transform 0.22s cubic-bezier(.4,0,.2,1), visibility 0.22s;
+      z-index: 30;
+    }
+
+    .contact-wrap.open .contact-card {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .contact-card-title {
+      font-size: 0.74rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 2px 4px 10px;
+    }
+
+    .contact-entry {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      transition: 0.2s ease;
+    }
+
+    .contact-entry + .contact-entry { margin-top: 4px; }
+
+    .contact-entry:hover {
+      background: var(--card-hover);
+      border-color: rgba(255, 206, 58, 0.35);
+      box-shadow: 0 0 0 1px var(--accent-2) inset, 0 0 18px rgba(255, 206, 58, 0.22);
+      transform: translateY(-1px);
+    }
+
+    .contact-entry strong { font-size: 0.92rem; color: var(--text); }
+    .contact-entry span { font-size: 0.84rem; color: var(--accent); word-break: break-all; }
+
     /* ---------- hero ---------- */
     .hero {
       margin-top: 18px;
@@ -347,8 +447,6 @@
 
     .panel-head h3 { margin: 0; font-size: 1rem; letter-spacing: 0.02em; }
     .panel-head small { color: var(--muted); }
-
-    .search-wrap { padding: 14px 18px 18px; border-bottom: 1px solid var(--line); }
 
     .search {
       width: 100%;
@@ -559,6 +657,14 @@
     }
     .footer p { margin: 0 0 6px; }
     .footer-link-row { margin-top: 10px !important; }
+    .footer-copyright {
+      margin-top: 14px !important;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      font-size: 0.82rem;
+      color: var(--muted);
+      letter-spacing: 0.01em;
+    }
     .footer-link {
       display: inline-flex;
       align-items: center;
@@ -591,18 +697,22 @@
       .topbar { top: 8px; padding: 12px; border-radius: 22px; }
       .brand { gap: 10px; }
       .brand-mark { width: 46px; height: 46px; border-radius: 14px; }
-      .hero-grid, .content, .panel-head, .search-wrap { padding-left: 14px; padding-right: 14px; }
+      .hero-grid, .content, .panel-head { padding-left: 14px; padding-right: 14px; }
       .hero h2 { font-size: 1.7rem; }
       .cards { grid-template-columns: 1fr; }
       .stats { grid-template-columns: 1fr 1fr; }
       .top-actions { gap: 8px; }
       .chip { padding: 10px 12px; }
+      .topbar-search { flex: 1 1 100%; max-width: none; order: -1; }
+      .contact-card { right: 0; left: auto; }
     }
 
     @media (max-width: 520px) {
       .stats { grid-template-columns: 1fr; }
       .hero-actions, .card-links, .top-actions { flex-direction: column; align-items: stretch; }
       .btn, .chip, .mini-link { width: 100%; justify-content: center; }
+      .topbar-search, .contact-wrap { width: 100%; }
+      .contact-card { right: 0; width: 100%; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -667,6 +777,32 @@
       </div>
 
       <div class="top-actions">
+        <div class="topbar-search">
+          <span class="search-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          </span>
+          <input id="searchInput" type="search" placeholder="Search semester, course, folder, or paper..." />
+        </div>
+
+        <div class="contact-wrap" id="contactWrap">
+          <button class="chip" id="contactBtn" type="button" title="Contact the team" aria-haspopup="true" aria-expanded="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            Contact
+          </button>
+
+          <div class="contact-card" id="contactCard" role="dialog" aria-label="Contact information">
+            <div class="contact-card-title">Core Team — BSEE 25/29</div>
+            <a class="contact-entry" href="mailto:muhduzair0179@gmail.com">
+              <strong>Muhammad Uzair · BSEE 25-29</strong>
+              <span>muhduzair0179@gmail.com</span>
+            </a>
+            <a class="contact-entry" href="mailto:javedasad002@gmail.com">
+              <strong>Asad Javed · BSEE 25-29</strong>
+              <span>javedasad002@gmail.com</span>
+            </a>
+          </div>
+        </div>
+
         <button class="chip theme-toggle" id="themeToggle" type="button" title="Switch theme">
           <span id="themeIcon" aria-hidden="true"></span>
           <span id="themeLabel">System</span>
@@ -717,22 +853,11 @@
           </div>
           <span class="meta" id="resultCount">0 items</span>
         </div>
-        <div class="search-wrap">
-          <input id="searchInput" class="search" type="search" placeholder="Search semester, course, folder, or paper..." />
-        </div>
 
         <nav class="tree" id="treeRoot" aria-label="Resource tree"></nav>
       </aside>
 
       <main class="panel" id="projects-panel">
-        <div class="panel-head">
-          <div>
-            <h3>Workspace Overview</h3>
-            <small>Quick entry points for your vault</small>
-          </div>
-          <span class="meta">GitHub Pages ready</span>
-        </div>
-
         <div class="content">
           <div class="section-title">
             <div>
@@ -786,11 +911,6 @@
               </div>
             </div>
           </div>
-
-          <div class="notice">
-            <strong>Recommended structure</strong>
-            Use the homepage as a dashboard only. Keep the real content in folders like Semester 1 → Course → Lecture Notes / Slides / LAB / Assignments / Manuals / Reference Books / Past Papers. That keeps the system scalable as you add later semesters.
-          </div>
         </div>
       </main>
     </section>
@@ -803,6 +923,7 @@
           EE Work Palace ↗
         </a>
       </p>
+      <p class="footer-copyright">© 2026 Muhammad Uzair &amp; Asad Javed. All rights reserved.</p>
     </footer>
   </div>
 
@@ -1066,6 +1187,8 @@
     const resultCount = document.getElementById('resultCount');
     const searchInput = document.getElementById('searchInput');
     const themeToggle = document.getElementById('themeToggle');
+    const contactWrap = document.getElementById('contactWrap');
+    const contactBtn = document.getElementById('contactBtn');
     const themeIcon = document.getElementById('themeIcon');
     const themeLabel = document.getElementById('themeLabel');
     const openSemestersBtn = document.getElementById('openSemestersBtn');
@@ -1252,6 +1375,27 @@
     openProjectsBtn.addEventListener('click', () => openOnly('Projects'));
 
     searchInput.addEventListener('input', (e) => searchTree(e.target.value));
+
+    /* ---------- contact dropdown ---------- */
+    contactBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = contactWrap.classList.toggle('open');
+      contactBtn.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!contactWrap.contains(e.target)) {
+        contactWrap.classList.remove('open');
+        contactBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        contactWrap.classList.remove('open');
+        contactBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
 
     renderTree();
   </script>
