@@ -193,9 +193,10 @@
             z-index: 1;
         }
 
+        /* topbar with tiny top gap */
         .topbar {
             position: sticky;
-            top: 0;
+            top: 2px; /* tiny 1mm gap from viewport top */
             z-index: 20;
             display: flex;
             align-items: center;
@@ -360,9 +361,9 @@
         }
         .chip svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; opacity: 0.9; }
 
-        /* ---------- HERO with confined particle canvas ---------- */
+        /* hero with tiny margin-top */
         .hero {
-            margin-top: 16px;
+            margin-top: 4px; /* tiny gap below topbar */
             border: 1px solid var(--line);
             background: linear-gradient(160deg, rgba(0, 234, 255, 0.06) 0%, rgba(155, 92, 255, 0.04) 30%, rgba(255, 46, 230, 0.03) 60%, rgba(0, 234, 255, 0.05) 100%);
             backdrop-filter: blur(20px);
@@ -632,7 +633,7 @@
         }
         @media (max-width: 760px) {
             .shell { width: min(100% - 16px, 100%); }
-            .topbar { padding: 10px 12px; border-radius: 20px; flex-wrap: wrap; }
+            .topbar { padding: 10px 12px; border-radius: 20px; flex-wrap: wrap; top: 2px; }
             .brand { gap: 9px; flex: 1 1 auto; }
             .brand-mark { width: 38px; height: 38px; border-radius: 12px; }
             .topbar-search { flex: 1 1 100%; max-width: none; order: 3; margin: 5px 0 0; }
@@ -937,7 +938,7 @@
         if(window.matchMedia){ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ if(themePref==='system') applyTheme('system'); }); }
         applyTheme(themePref);
 
-        // Particle network confined to hero section
+        // Hero-confined particle network
         (function heroParticles(){
             const canvas=document.getElementById('heroCanvas');
             const ctx=canvas.getContext('2d');
